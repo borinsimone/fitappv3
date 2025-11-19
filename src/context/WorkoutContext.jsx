@@ -22,34 +22,150 @@ export const WorkoutProvider = ({ children }) => {
       id: 1,
       name: "Gambe e Spalle",
       date: new Date().toISOString().split("T")[0],
-      exercises: [
+      notes: "Allenamento completo lower body e spalle",
+      sections: [
         {
           id: 1,
-          name: "Squat",
-          sets: 4,
-          reps: 8,
-          completed: false,
+          name: "Gambe",
+          exercises: [
+            {
+              id: 1,
+              name: "Squat",
+              type: "reps",
+              notes: "Mantenere la schiena dritta",
+              sets: [
+                {
+                  id: 1,
+                  reps: 8,
+                  weight: 80,
+                  rest: 120,
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  reps: 8,
+                  weight: 82.5,
+                  rest: 120,
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  reps: 8,
+                  weight: 85,
+                  rest: 120,
+                  completed: false,
+                },
+                {
+                  id: 4,
+                  reps: 6,
+                  weight: 90,
+                  rest: 180,
+                  completed: false,
+                },
+              ],
+              completed: false,
+            },
+            {
+              id: 2,
+              name: "Leg Press",
+              type: "reps",
+              notes: "",
+              sets: [
+                {
+                  id: 1,
+                  reps: 12,
+                  weight: 120,
+                  rest: 90,
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  reps: 12,
+                  weight: 120,
+                  rest: 90,
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  reps: 10,
+                  weight: 130,
+                  rest: 120,
+                  completed: false,
+                },
+              ],
+              completed: false,
+            },
+          ],
         },
         {
           id: 2,
-          name: "Leg Press",
-          sets: 3,
-          reps: 12,
-          completed: false,
-        },
-        {
-          id: 3,
-          name: "Military Press",
-          sets: 4,
-          reps: 10,
-          completed: false,
-        },
-        {
-          id: 4,
-          name: "Alzate Laterali",
-          sets: 3,
-          reps: 15,
-          completed: false,
+          name: "Spalle",
+          exercises: [
+            {
+              id: 3,
+              name: "Military Press",
+              type: "reps",
+              notes: "",
+              sets: [
+                {
+                  id: 1,
+                  reps: 10,
+                  weight: 40,
+                  rest: 90,
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  reps: 10,
+                  weight: 40,
+                  rest: 90,
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  reps: 8,
+                  weight: 45,
+                  rest: 90,
+                  completed: false,
+                },
+                {
+                  id: 4,
+                  reps: 8,
+                  weight: 45,
+                  rest: 120,
+                  completed: false,
+                },
+              ],
+              completed: false,
+            },
+            {
+              id: 4,
+              name: "Plank",
+              type: "time",
+              notes: "Tenuta isometrica",
+              sets: [
+                {
+                  id: 1,
+                  time: 60,
+                  rest: 60,
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  time: 60,
+                  rest: 60,
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  time: 45,
+                  rest: 60,
+                  completed: false,
+                },
+              ],
+              completed: false,
+            },
+          ],
         },
       ],
       completed: false,
@@ -94,14 +210,24 @@ export const WorkoutProvider = ({ children }) => {
     },
   ]);
 
-  const addWorkout = (workout) => {
+  const addWorkout = (workout, targetDate = null) => {
     const newWorkout = {
       ...workout,
       id: workouts.length + 1,
-      date: new Date().toISOString().split("T")[0],
+      date:
+        targetDate ||
+        new Date().toISOString().split("T")[0],
       completed: false,
     };
     setWorkouts([...workouts, newWorkout]);
+  };
+
+  const getWorkoutByDate = (date) => {
+    return (
+      workouts.find(
+        (w) => w.date === date && !w.completed
+      ) || workoutHistory.find((w) => w.date === date)
+    );
   };
 
   const completeWorkout = (workoutId) => {
@@ -123,6 +249,7 @@ export const WorkoutProvider = ({ children }) => {
 
   const toggleExerciseComplete = (
     workoutId,
+    sectionId,
     exerciseId
   ) => {
     setWorkouts(
@@ -130,13 +257,22 @@ export const WorkoutProvider = ({ children }) => {
         if (workout.id === workoutId) {
           return {
             ...workout,
-            exercises: workout.exercises.map((exercise) =>
-              exercise.id === exerciseId
+            sections: workout.sections.map((section) =>
+              section.id === sectionId
                 ? {
-                    ...exercise,
-                    completed: !exercise.completed,
+                    ...section,
+                    exercises: section.exercises.map(
+                      (exercise) =>
+                        exercise.id === exerciseId
+                          ? {
+                              ...exercise,
+                              completed:
+                                !exercise.completed,
+                            }
+                          : exercise
+                    ),
                   }
-                : exercise
+                : section
             ),
           };
         }
@@ -155,6 +291,16 @@ export const WorkoutProvider = ({ children }) => {
     );
   };
 
+  const updateWorkout = (workoutId, updatedWorkout) => {
+    setWorkouts(
+      workouts.map((w) =>
+        w.id === workoutId
+          ? { ...w, ...updatedWorkout, id: workoutId }
+          : w
+      )
+    );
+  };
+
   const value = {
     workouts,
     supplements,
@@ -163,6 +309,8 @@ export const WorkoutProvider = ({ children }) => {
     completeWorkout,
     toggleExerciseComplete,
     toggleSupplementTaken,
+    getWorkoutByDate,
+    updateWorkout,
   };
 
   return (
