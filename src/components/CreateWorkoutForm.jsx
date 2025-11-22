@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useWorkout } from "../context/WorkoutContext";
+import { exerciseDatabase } from "../data/exercises";
 
 function CreateWorkoutForm({
   onClose,
@@ -178,11 +179,25 @@ function CreateWorkoutForm({
         if (section.id === sectionId) {
           return {
             ...section,
-            exercises: section.exercises.map((ex) =>
-              ex.id === exerciseId
-                ? { ...ex, [field]: value }
-                : ex
-            ),
+            exercises: section.exercises.map((ex) => {
+              if (ex.id === exerciseId) {
+                const updatedEx = { ...ex, [field]: value };
+
+                // Auto-detect type if name changes
+                if (field === "name") {
+                  const foundExercise =
+                    exerciseDatabase.find(
+                      (dbEx) => dbEx.name === value
+                    );
+                  if (foundExercise) {
+                    updatedEx.type = foundExercise.type;
+                  }
+                }
+
+                return updatedEx;
+              }
+              return ex;
+            }),
           };
         }
         return section;
@@ -420,6 +435,7 @@ function CreateWorkoutForm({
                               )
                             }
                             className="exercise-name-input"
+                            list="exercise-suggestions"
                             required
                           />
                           <select
@@ -646,6 +662,14 @@ function CreateWorkoutForm({
           </div>
         </form>
       </div>
+
+      <datalist id="exercise-suggestions">
+        {exerciseDatabase.map((ex, idx) => (
+          <option key={idx} value={ex.name}>
+            {ex.category}
+          </option>
+        ))}
+      </datalist>
     </div>
   );
 }

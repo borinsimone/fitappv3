@@ -641,6 +641,16 @@ button {
   transition: all 0.3s ease;
 }
 
+.exercise-list-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exercise-list-item:hover {
+  transform: translateX(5px);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .section-tag {
   color: var(--secondary-color);
   font-weight: 600;
@@ -1186,7 +1196,267 @@ button {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive Design */
+/* Timer Overlay */
+.timer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+}
+
+.timer-content {
+  background-color: transparent;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-content h3 {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 300;
+}
+
+.timer-circle-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.timer-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+.timer-circle-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 12;
+}
+
+.timer-circle-progress {
+  fill: none;
+  stroke: var(--primary-color);
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-display {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  z-index: 10;
+  text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+}
+
+.timer-controls {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.timer-controls button {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.timer-controls .secondary-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.timer-controls .secondary-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.timer-controls .primary-btn {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.timer-controls .primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+}
+
+/* Active Exercise Table */
+.active-exercise-table-container {
+  margin-top: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--bg-light);
+}
+
+.active-exercise-header-row {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.active-exercise-row {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.active-exercise-row:last-child {
+  border-bottom: none;
+}
+
+.active-exercise-row.current {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-left: 4px solid var(--primary-color);
+}
+
+.active-exercise-row.completed {
+  background-color: rgba(16, 185, 129, 0.05);
+  color: var(--text-secondary);
+}
+
+.col-set {
+  width: 40px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.active-exercise-row.current .col-set {
+  color: var(--primary-color);
+}
+
+.col-data {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.col-action {
+  width: 120px; /* Increased width to accommodate two buttons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-input {
+  width: 100%;
+  max-width: 60px;
+  background-color: var(--bg-light);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.4rem 0.2rem;
+  transition: all 0.2s ease;
+}
+
+.table-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: var(--bg-medium);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Remove arrows from number input */
+.table-input::-webkit-outer-spin-button,
+.table-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.table-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.table-action-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.pending-dot {
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  line-height: 0;
+}
+
+/* Mobile adjustments for table */
+@media (max-width: 480px) {
+  .active-exercise-header-row,
+  .active-exercise-row {
+    padding: 0.6rem 0.25rem;
+  }
+
+  .col-set {
+    width: 30px;
+    font-size: 0.9rem;
+  }
+
+  .col-action {
+    width: 100px;
+  }
+
+  .table-input {
+    font-size: 1rem;
+    padding: 0.3rem 0.1rem;
+    max-width: 50px;
+  }
+
+  .table-action-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding: 0.5rem;
@@ -1384,5 +1654,89 @@ button {
   .main-content {
     padding: 2rem;
     padding-bottom: 2rem;
+  }
+}
+
+.set-action-btn {
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  margin-left: auto;
+  min-width: 80px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.set-preview-item.active .set-action-btn {
+  background-color: white;
+  color: var(--primary-color);
+}
+
+.set-preview-item.active .set-action-btn:hover {
+  background-color: #f0f9ff;
+  transform: translateY(-1px);
+}
+
+.detail-input {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  width: 100px;
+  text-align: center;
+  padding: 0.2rem;
+  transition: all 0.3s ease;
+}
+
+.detail-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Remove arrows from number input */
+.detail-input::-webkit-outer-spin-button,
+.detail-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.detail-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.action-buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.small-gap {
+  margin-right: 0.25rem;
+}
+
+.timer-circle-progress.exercise-mode {
+  stroke: var(--success-color);
+}
+
+.col-action {
+  width: 120px; /* Increased width to accommodate two buttons */
+}
+
+@media (max-width: 480px) {
+  .col-action {
+    width: 100px;
+  }
+
+  .action-buttons-container {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .small-gap {
+    margin-right: 0;
+    margin-bottom: 0.25rem;
   }
 }

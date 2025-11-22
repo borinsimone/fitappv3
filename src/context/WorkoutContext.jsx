@@ -301,6 +301,66 @@ export const WorkoutProvider = ({ children }) => {
     );
   };
 
+  const updateSet = (
+    workoutId,
+    sectionId,
+    exerciseId,
+    setId,
+    updates
+  ) => {
+    setWorkouts(
+      workouts.map((workout) => {
+        if (workout.id !== workoutId) return workout;
+
+        if (workout.sections) {
+          return {
+            ...workout,
+            sections: workout.sections.map((section) => {
+              if (sectionId && section.id !== sectionId)
+                return section;
+
+              return {
+                ...section,
+                exercises: section.exercises.map(
+                  (exercise) => {
+                    if (exercise.id !== exerciseId)
+                      return exercise;
+
+                    return {
+                      ...exercise,
+                      sets: exercise.sets.map((set) =>
+                        set.id === setId
+                          ? { ...set, ...updates }
+                          : set
+                      ),
+                    };
+                  }
+                ),
+              };
+            }),
+          };
+        } else {
+          return {
+            ...workout,
+            exercises: workout.exercises.map((exercise) => {
+              if (exercise.id !== exerciseId)
+                return exercise;
+
+              return {
+                ...exercise,
+                sets: exercise.sets.map((set) =>
+                  set.id === setId
+                    ? { ...set, ...updates }
+                    : set
+                ),
+              };
+            }),
+          };
+        }
+      })
+    );
+  };
+
   const value = {
     workouts,
     supplements,
@@ -311,6 +371,7 @@ export const WorkoutProvider = ({ children }) => {
     toggleSupplementTaken,
     getWorkoutByDate,
     updateWorkout,
+    updateSet,
   };
 
   return (
